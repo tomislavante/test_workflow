@@ -1,4 +1,4 @@
-name: Create Release
+name: Build and Release Client
 
 on:
   push:
@@ -6,31 +6,42 @@ on:
       - main
 
 jobs:
-  create_release:
+  build_and_release:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Calculate Current Version
-        id: calculate_version
-        run: echo "VERSION=1.0.$(date +'%Y%m%d%H%M%S')" >> $GITHUB_ENV
+      - name: Set up .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+
+      - name: Publish Client
+        working-directory: Workflow/Client
+        run: |
+          dotnet publish Client.csproj -c Release -p:PublishSingleFile=true -p:AssemblyVersion=1.0.0 --self-contained true -r win-x64 -o ./ClientBuild
+
+      - name: Zip Client Build
+        working-directory: Workflow/Client
+        run: zip -r ../ClientBuild.zip ./ClientBuild
 
       - name: Create GitHub Release
         id: create_release
         uses: actions/create-release@v1
         with:
-          tag_name: v${{ env.VERSION }}
-          release_name: Release v${{ env.VERSION }}
+          tag_name: v1.0.$(date +'%Y%m%d%H%M%S')
+          release_name: Release v1.0.$(date +'%Y%m%d%H%M%S')
           draft: false
           prerelease: false
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Upload to release
-        uses: actions/upload-artifact@v4
+      - name: Upload Release Asset
+        uses: actions/upload-release-asset@v1
         with:
-          name: ReleaseArtifact
-          path: ./path_to_your_artifact
-
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: Workflow/ClientBuild.zip
+          asset_name: ClientBuild.zip
+          asset_content_type: application/zip
