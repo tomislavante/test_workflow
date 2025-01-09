@@ -25,7 +25,6 @@ jobs:
           release_name: Release v${{ env.VERSION }}
           draft: false
           prerelease: false
-          generate_release_notes: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
