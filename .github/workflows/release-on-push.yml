@@ -1,4 +1,4 @@
-name: Build and Release Client
+name: Release
 
 on:
   release:
@@ -7,10 +7,15 @@ on:
 jobs:
   build_and_release:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: Workflow/Client
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          ref: main  # Explicitly check out the main branch 
 
       - name: Set up .NET
         uses: actions/setup-dotnet@v4
@@ -18,11 +23,9 @@ jobs:
           dotnet-version: 9.0.x
 
       - name: Publish Client
-        working-directory: Workflow/Client
         run: dotnet publish Client.csproj -c Release -p:PublishSingleFile=true -p:AssemblyVersion=1.0.0 --self-contained true -r win-x64 -o ./ClientBuild
 
       - name: Zip Client Build
-        working-directory: Workflow/Client
         run: zip -r ../ClientBuild.zip ./ClientBuild
 
       - name: Upload Release Asset
