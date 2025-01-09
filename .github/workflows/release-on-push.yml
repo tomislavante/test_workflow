@@ -20,8 +20,7 @@ jobs:
 
       - name: Publish Client
         working-directory: Workflow/Client
-        run: |
-          dotnet publish Client.csproj -c Release -p:PublishSingleFile=true -p:AssemblyVersion=1.0.0 --self-contained true -r win-x64 -o ./ClientBuild
+        run: dotnet publish Client.csproj -c Release -p:PublishSingleFile=true -p:AssemblyVersion=1.0.0 --self-contained true -r win-x64 -o ./ClientBuild
 
       - name: Zip Client Build
         working-directory: Workflow/Client
@@ -31,8 +30,8 @@ jobs:
         id: create_release
         uses: actions/create-release@v1
         with:
-          tag_name: v1.0.${{github.run_number}}
-          release_name: Release v1.0.${{github.run_number}}
+          tag_name: v1.0.${{ github.run_number }}
+          release_name: Release v1.0.${{ github.run_number }}
           draft: false
           prerelease: false
         env:
@@ -46,4 +45,4 @@ jobs:
           asset_name: ClientBuild.zip
           asset_content_type: application/zip
         env:
-	  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
