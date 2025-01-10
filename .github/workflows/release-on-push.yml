@@ -10,7 +10,7 @@ jobs:
     runs-on: windows-latest
     defaults:
       run:
-        working-directory: Workflow/Client
+        working-directory: Workflow\Client
 
     steps:
       - name: Checkout code
@@ -29,14 +29,14 @@ jobs:
       - name: Zip Client Build
         run: |
           Add-Type -AssemblyName System.IO.Compression.FileSystem
-          [IO.Compression.ZipFile]::CreateFromDirectory('Workflow\Client\ClientBuild', 'Workflow\ClientBuild.zip')
+          [IO.Compression.ZipFile]::CreateFromDirectory('ClientBuild', 'Workflow\ClientBuild.zip')
         shell: pwsh
 
       - name: Upload Release Asset
         uses: actions/upload-release-asset@v1
         with:
           upload_url: ${{ github.event.release.upload_url }}
-          asset_path: Workflow/ClientBuild.zip
+          asset_path: Workflow\ClientBuild.zip
           asset_name: ClientBuild.zip
           asset_content_type: application/zip
         env:
