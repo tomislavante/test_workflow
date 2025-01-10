@@ -1,37 +1,42 @@
-name: Create Release
+name: Release
 
 on:
-  push:
-    branches:
-      - main
+  release:
+    types: [published]
+  workflow_dispatch:  # Adding manual trigger capability
 
 jobs:
-  create_release:
+  build_and_release:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    defaults:
+      run:
+        working-directory: Workflow/Client
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-
-      - name: Calculate Current Version
-        id: calculate_version
-        run: echo "VERSION=1.0.$(date +'%Y%m%d%H%M%S')" >> $GITHUB_ENV
-
-      - name: Create GitHub Release
-        id: create_release
-        uses: actions/create-release@v1
         with:
-          tag_name: v${{ env.VERSION }}
-          release_name: Release v${{ env.VERSION }}
-          draft: false
-          prerelease: false
-          generate_release_notes: true
+          ref: main  # Explicitly check out the main branch 
+
+      - name: Set up .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 9.0.x
+
+      - name: Publish Client
+        run: dotnet publish Client.csproj -c Release -p:PublishSingleFile=true -p:AssemblyVersion=1.0.0 --self-contained true -r win-x64 -o ./ClientBuild
+
+      - name: Zip Client Build
+        run: zip -r ../ClientBuild.zip ./ClientBuild
+
+      - name: Upload Release Asset
+        uses: actions/upload-release-asset@v1
+        with:
+          upload_url: ${{ github.event.release.upload_url }}
+          asset_path: Workflow/ClientBuild.zip
+          asset_name: ClientBuild.zip
+          asset_content_type: application/zip
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Upload to release
-        uses: actions/upload-artifact@v4
-        with:
-          name: ReleaseArtifact
-          path: ./path_to_your_artifact
-
