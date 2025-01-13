@@ -3,7 +3,6 @@ name: Release
 on:
   release:
     types: [published]
-  workflow_dispatch:  # Adding manual trigger capability
 
 jobs:
   build_and_release:
@@ -26,24 +25,17 @@ jobs:
           dotnet-version: 9.0.x
 
       - name: Publish Client
-        run: dotnet publish Client.csproj -c Release -p:PublishSingleFile=true -p:AssemblyVersion=1.0.0 --self-contained true -r win-x64 -o ./client
+        run: dotnet publish Client.csproj -c Release --self-contained true -r win-x64 -o ./client
 
       - name: Compress Client Build into tar.gz
-        run: |
-          tar.exe -czf client.tar.gz -C ./client .
+        run: tar.exe -czf client-${{ github.event.release.tag_name }}.tar.gz -C ./client .
         shell: bash
       - name: Upload Release Asset
         uses: actions/upload-release-asset@v1
         with:
           upload_url: ${{ github.event.release.upload_url }}
-          # asset_path: Workflow/Client/client/Client.exe
-          # asset_name: Client.exe
-          # asset_content_type: application/vnd.microsoft.portable-executable
-          asset_path: Workflow/Client/client.tar.gz
-          asset_name: client.tar.gz
+          asset_path: Workflow/Client/client-${{ github.event.release.tag_name }}.tar.gz
+          asset_name: client-${{ github.event.release.tag_name }}.tar.gz
           asset_content_type: application/gzip
-          # asset_path: Workflow/ClientBuild.zip
-          # asset_name: ClientBuild.zip
-          # asset_content_type: application/zip
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
