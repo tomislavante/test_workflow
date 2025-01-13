@@ -26,17 +26,20 @@ jobs:
           dotnet-version: 9.0.x
 
       - name: Publish Client
-        run: dotnet publish Client.csproj -c Release -p:PublishSingleFile=true -p:AssemblyVersion=1.0.0 --self-contained true -r win-x64 -o ./ClientBuild
+        run: dotnet publish Client.csproj -c Release -p:PublishSingleFile=true -p:AssemblyVersion=1.0.0 --self-contained true -r win-x64 -o ./client
 
-      - name: Zip Client Build
-        run: zip -r ../ClientBuild.zip ./ClientBuild
+      # - name: Zip Client Build
+      #   run: zip -r ../ClientBuild.zip ./ClientBuild
 
       - name: Upload Release Asset
         uses: actions/upload-release-asset@v1
         with:
           upload_url: ${{ github.event.release.upload_url }}
-          asset_path: Workflow/ClientBuild.zip
-          asset_name: ClientBuild.zip
-          asset_content_type: application/zip
+          asset_path: Workflow/client/Client.exe
+          asset_name: Client.exe
+          asset_content_type: application/vnd.microsoft.portable-executable
+          # asset_path: Workflow/ClientBuild.zip
+          # asset_name: ClientBuild.zip
+          # asset_content_type: application/zip
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
