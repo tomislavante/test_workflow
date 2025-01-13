@@ -1,8 +1,12 @@
 {
   "version": 2,
-  "dgSpecHash": "ZMXk9Gj006A=",
+  "dgSpecHash": "BFexdWei9MU=",
   "success": true,
   "projectFilePath": "/Users/tomislavantebrncic/Projects/workflow/Workflow/Client/Client.csproj",
-  "expectedPackageFiles": [],
+  "expectedPackageFiles": [
+    "/Users/tomislavantebrncic/.nuget/packages/microsoft.dotnet.ilcompiler/9.0.0/microsoft.dotnet.ilcompiler.9.0.0.nupkg.sha512",
+    "/Users/tomislavantebrncic/.nuget/packages/microsoft.net.illink.tasks/9.0.0/microsoft.net.illink.tasks.9.0.0.nupkg.sha512",
+    "/Users/tomislavantebrncic/.nuget/packages/runtime.osx-arm64.microsoft.dotnet.ilcompiler/9.0.0/runtime.osx-arm64.microsoft.dotnet.ilcompiler.9.0.0.nupkg.sha512"
+  ],
   "logs": []
 }

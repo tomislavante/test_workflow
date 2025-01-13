@@ -1,10 +1,17 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <OutputType>Exe</OutputType>
+        <OutputType>WinExe</OutputType>
         <TargetFramework>net9.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
+        <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+        <WarningsAsErrors>Nullable</WarningsAsErrors>
+        <PublishAot>true</PublishAot>
+        <Version>1.0.0</Version>
+        <EnableConfigurationBindingGenerator>true</EnableConfigurationBindingGenerator>
+        <DebugSymbols>false</DebugSymbols>
+        <EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles>
     </PropertyGroup>
 
 </Project>
