@@ -7,7 +7,7 @@ on:
 
 jobs:
   build_and_release:
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
     permissions:
       contents: write
     defaults:
@@ -30,7 +30,8 @@ jobs:
 
       - name: Compress Client Build into tar.gz
         run: |
-          tar -czf client.tar.gz -C ./client .
+          tar.exe -czf client.tar.gz -C ./client .
+        shell: bash
       - name: Upload Release Asset
         uses: actions/upload-release-asset@v1
         with:
