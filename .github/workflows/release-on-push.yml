@@ -35,7 +35,7 @@ jobs:
         uses: actions/upload-release-asset@v1
         with:
           upload_url: ${{ github.event.release.upload_url }}
-          asset_path: Workflow/client/Client.exe
+          asset_path: Workflow/Client/client/Client.exe
           asset_name: Client.exe
           asset_content_type: application/vnd.microsoft.portable-executable
           # asset_path: Workflow/ClientBuild.zip
